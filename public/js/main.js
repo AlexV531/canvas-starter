@@ -10,9 +10,14 @@ const viewport = {
 /** Scene scaling */
 const SCALE = 10.0
 /** Background */
-const BG_COLOR = '#000000'
+const BG_COLOR = '#FFFF00'
 /** Radius of circle */
-const CIRCLE_RADIUS = 2.0
+const CIRCLE_RADIUS = 1.0
+
+const position = {
+	x:0, y:0
+}
+let prevT = Date.now()
 
 /** Handles initial canvas sizing, and all resizing thereafter */
 function resize() {
@@ -46,11 +51,26 @@ function render() {
 
 	// Draw a circle
 	context.beginPath()
-	context.fillStyle = '#339966'
-	context.arc(0, 0, CIRCLE_RADIUS, 0, Math.PI * 2)
+	context.fillStyle = '#000066'
+	context.arc(position.x, position.y, CIRCLE_RADIUS, 0, Math.PI * 2)
 	context.fill()
 
 	context.restore()
 }
 
 initApp()
+
+//start animation loop
+function update() {
+	const curT = Date.now()
+	const deltaT = curT - prevT
+	const fT = deltaT/1000
+	//position.x = position.x + fT * 1
+	position.x = Math.tan(curT/1000)
+	position.y = Math.sin(curT/1000) + Math.sin(curT/100)
+	prevT = curT
+	render()
+	requestAnimationFrame(update)
+}
+
+requestAnimationFrame(update)
